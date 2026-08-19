@@ -4,12 +4,13 @@ import { drawStaff, drawStaffCovered } from './staff.js';
 const TOTAL_ROUNDS = 5;
 const TIMER_MS = 3500;
 
-let cfg;           // { players, difficulty, timer, lang }
-let scores;        // [0, 0, 0, 0]
-let round;         // 1–5
-let notes;         // nota assegnata per player (array)
-let answers;       // risposta corrente per player ('q' o nome nota)
+let cfg;          // { players, difficulty, timer, lang }
+let scores;       // [0, 0, 0, 0]
+let round;        // 1–5
+let notes;        // nota assegnata per player (array)
+let answers;      // risposta corrente per player ('q' o nome nota)
 let timerHandle;
+let bound = false;
 
 // --- Entry point ---
 export function startGame(state, onHome) {
@@ -20,7 +21,7 @@ export function startGame(state, onHome) {
   document.getElementById('game-screen').hidden = false;
   renderScores();
   renderPlayerVisibility();
-  bindGame(onHome);
+  if (!bound) { bindGame(onHome); bound = true; }
   startRound();
 }
 
@@ -30,10 +31,12 @@ function startRound() {
   notes = drawNotes();
   answers = Array(cfg.players).fill('q');
 
+  const canvas = document.getElementById('staff-canvas');
+  drawStaff(canvas, notes, cfg.players);
+
   for (let i = 0; i < cfg.players; i++) {
-    const canvas = document.getElementById(`staff-canvas-${i + 1}`);
-    drawStaff(canvas, notes[i]);
     setAnswerBar(i, 'q');
+    document.getElementById(`answer-bar-${i + 1}`).hidden = true;
   }
 
   document.getElementById('btn-go').hidden = false;
@@ -60,7 +63,6 @@ function onGo() {
   document.getElementById('btn-go').hidden = true;
   document.getElementById('note-creator').hidden = false;
 
-  // Mostra le barre risposta
   for (let i = 0; i < cfg.players; i++) {
     document.getElementById(`answer-bar-${i + 1}`).hidden = false;
   }
@@ -68,11 +70,8 @@ function onGo() {
   if (cfg.timer) {
     timerHandle = setTimeout(() => {
       document.getElementById('spot-cover').hidden = false;
-      // Copre le note sul canvas
-      for (let i = 0; i < cfg.players; i++) {
-        const canvas = document.getElementById(`staff-canvas-${i + 1}`);
-        drawStaffCovered(canvas);
-      }
+      const canvas = document.getElementById('staff-canvas');
+      drawStaffCovered(canvas, cfg.players);
     }, TIMER_MS);
   }
 }
@@ -107,18 +106,15 @@ function onReveal() {
   document.getElementById('btn-reveal').hidden = true;
   document.getElementById('note-creator').hidden = true;
 
-  // Mostra la nota corretta su ogni pentagramma
-  for (let i = 0; i < cfg.players; i++) {
-    const canvas = document.getElementById(`staff-canvas-${i + 1}`);
-    drawStaff(canvas, notes[i]);
+  // Ridisegna il pentagramma con le note (in caso fossero coperte)
+  const canvas = document.getElementById('staff-canvas');
+  drawStaff(canvas, notes, cfg.players);
 
-    // Ruota la barra alla risposta corretta
+  for (let i = 0; i < cfg.players; i++) {
     const correctKey = cfg.lang === 'it' ? NOTE_TO_BAR_IT[notes[i]] : NOTE_TO_BAR_EN[notes[i]];
     setAnswerBar(i, correctKey);
 
-    // Punto se risposta corretta
-    const playerAnswer = answers[i];
-    if (playerAnswer === correctKey) {
+    if (answers[i] === correctKey) {
       scores[i] = Math.min(5, scores[i] + 1);
       flashScore(i);
     }
@@ -154,15 +150,14 @@ function adjustScore(playerIdx, delta) {
 
 // --- Render helpers ---
 function setAnswerBar(playerIdx, noteKey) {
-  const lang = cfg.lang;
-  const pl = playerIdx + 1;
+  const pl  = playerIdx + 1;
   const img = document.getElementById(`answer-bar-${pl}`);
-  img.src = `barra_risposta_${lang}_${noteKey}_pl${pl}.png`;
+  img.src = `barra_risposta_${cfg.lang}_${noteKey}_pl${pl}.png`;
 }
 
 function renderScores() {
   for (let i = 0; i < 4; i++) {
-    const el = document.getElementById(`score-${i + 1}`);
+    const el      = document.getElementById(`score-${i + 1}`);
     const visible = i < cfg.players;
     el.hidden = !visible;
     if (visible) el.src = `pl${i + 1}-score-${scores[i]}.png`;
@@ -184,7 +179,7 @@ function hideAnswerBars() {
 function renderPlayerVisibility() {
   for (let i = 1; i <= 4; i++) {
     const visible = i <= cfg.players;
-    document.getElementById(`player-slot-${i}`).hidden = !visible;
+    document.getElementById(`player-controls-${i}`).hidden = !visible;
   }
 }
 
@@ -192,7 +187,7 @@ function updateRoundDisplay() {
   document.getElementById('round-display').textContent = `${round} / ${TOTAL_ROUNDS}`;
 }
 
-// --- Binding eventi ---
+// --- Binding eventi (eseguito una sola volta) ---
 function bindGame(onHome) {
   document.getElementById('btn-go').addEventListener('click', onGo);
   document.getElementById('btn-reveal').addEventListener('click', onReveal);
@@ -200,25 +195,22 @@ function bindGame(onHome) {
     clearTimeout(timerHandle);
     document.getElementById('game-screen').hidden = true;
     document.getElementById('home-screen').hidden = false;
-    // Reset winner icons
     for (let i = 1; i <= 4; i++) {
       document.getElementById(`winner-icon-${i}`).hidden = true;
     }
+    bound = false;
     onHome();
   });
 
-  // Barre risposta: tap dx/sx per ogni giocatore
   for (let i = 1; i <= 4; i++) {
     const bar = document.getElementById(`answer-bar-${i}`);
     bar.addEventListener('click', e => {
-      if (document.getElementById('btn-reveal').hidden === false) return;
-      const half = bar.offsetWidth / 2;
-      const dir = e.offsetX > half ? 1 : -1;
+      if (!document.getElementById('btn-reveal').hidden) return;
+      const dir = e.offsetX > bar.offsetWidth / 2 ? 1 : -1;
       cycleAnswer(i - 1, dir);
     });
   }
 
-  // Pulsanti ±
   for (let i = 1; i <= 4; i++) {
     document.getElementById(`btn-plus-${i}`)
       .addEventListener('click', () => adjustScore(i - 1, 1));

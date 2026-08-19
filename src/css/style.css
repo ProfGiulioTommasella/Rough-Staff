@@ -22,32 +22,25 @@ html, body {
   object-fit: cover;
 }
 
-.home-controls {
-  position: absolute; inset: 0;
-}
+.home-controls { position: absolute; inset: 0; }
 
-/* Titolo */
 #home-title { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); }
 
-/* Pulsanti giocatori */
 #players-row {
   position: absolute; top: 108px; left: 50%; transform: translateX(-50%);
   display: flex; gap: 16px;
 }
 
-/* Pulsanti difficoltà */
 #diff-row {
   position: absolute; top: 230px; left: 50%; transform: translateX(-50%);
   display: flex; gap: 14px;
 }
 
-/* Lingua + Timer */
 #options-row {
   position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%);
   display: flex; gap: 24px; align-items: center;
 }
 
-/* Start */
 #btn-start {
   position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
   cursor: pointer;
@@ -73,113 +66,114 @@ html, body {
 
 .game-ui { position: absolute; inset: 0; }
 
-/* Round display */
+/* Header: round e pulsante home */
 #round-display {
-  position: absolute; top: 14px; left: 50%;
+  position: absolute; top: 10px; left: 50%;
   transform: translateX(-50%);
   color: #F5F2EC; font-size: 22px; letter-spacing: 2px;
 }
 
-/* Note creator + spot cover — area pentagramma comune */
-#note-creator {
-  position: absolute; top: 50px; left: 28px;
-  width: 48px; height: 48px;
-  object-fit: contain;
+#btn-home {
+  position: absolute; top: 8px; right: 16px;
+  cursor: pointer;
 }
-#spot-cover {
-  position: absolute; top: 54px; left: 54px;
-  width: 640px;
+
+/* ── AREA PENTAGRAMMA ── */
+#staff-area {
+  position: absolute;
+  top: 44px; left: 20px; right: 20px;
+  height: 180px;
+}
+
+#staff-canvas {
+  display: block;
+  width: 100%; height: 160px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+/* Note creator: animazione dopo GO */
+#note-creator {
+  position: absolute; top: 4px; left: 0;
+  height: 50px;
   object-fit: contain;
   pointer-events: none;
 }
 
-/* GO! e REVEAL — centrati in alto */
+/* Spot cover: copre le note dopo 3.5s (joker) */
+#spot-cover {
+  position: absolute; top: 0; left: 72px; right: 0;
+  height: 160px;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+/* GO! e REVEAL — centrati in basso */
 #btn-go, #btn-reveal {
-  position: absolute; top: 680px; left: 50%;
+  position: absolute; bottom: 14px; left: 50%;
   transform: translateX(-50%);
   cursor: pointer; z-index: 10;
 }
 
-/* Home button */
-#btn-home {
-  position: absolute; top: 14px; right: 18px;
-  cursor: pointer;
-}
-
-/* ── SLOT GIOCATORE ── */
-/* 4 righe da ~162px ciascuna, partono a y=60 */
-.player-slot {
+/* ── RIGA CONTROLLI GIOCATORE ── */
+/* 4 righe da 120px a partire da y=230 */
+.player-controls {
   position: absolute; left: 0; right: 0;
-  height: 162px;
+  height: 120px;
   display: flex; align-items: center;
+  padding: 0 16px;
+  gap: 12px;
 }
-#player-slot-1 { top:  58px; }
-#player-slot-2 { top: 222px; }
-#player-slot-3 { top: 386px; }
-#player-slot-4 { top: 550px; }
 
-/* Badge giocatore */
+#player-controls-1 { top: 230px; }
+#player-controls-2 { top: 352px; }
+#player-controls-3 { top: 474px; }
+#player-controls-4 { top: 596px; }
+
+/* Badge */
 .player-badge {
   flex-shrink: 0;
-  width: 110px; height: 140px;
-  object-fit: contain;
-  margin-left: 8px;
-}
-
-/* Canvas pentagramma */
-.staff-canvas {
-  flex: 1;
-  height: 120px;
-  margin: 0 8px;
-}
-
-/* Chiave di violino sopra il canvas (posizionata via JS o assoluta) */
-.clef-img {
-  position: absolute;
   height: 100px;
   object-fit: contain;
-  pointer-events: none;
 }
 
 /* Barra risposta */
 .answer-bar {
-  flex-shrink: 0;
-  height: 130px;
+  flex: 1;
+  max-width: 220px;
+  height: 110px;
   object-fit: contain;
   cursor: pointer;
-  margin-right: 4px;
 }
 .answer-bar:active { opacity: 0.85; }
 
 /* Score */
 .score-img {
   flex-shrink: 0;
-  height: 110px;
+  height: 90px;
   object-fit: contain;
-  margin: 0 4px;
 }
 
-/* Score animation */
+/* Score animation (overlay) */
 .score-anim {
-  position: absolute; right: 60px;
-  height: 110px;
+  position: absolute; right: 100px;
+  height: 90px;
   object-fit: contain;
   pointer-events: none;
 }
 
-/* +/- buttons */
+/* Pulsanti ± */
 .btn-plus, .btn-minus {
   flex-shrink: 0;
-  width: 36px; height: 36px;
+  width: 38px; height: 38px;
   object-fit: contain;
   cursor: pointer;
-  margin: 0 2px;
 }
+.btn-plus:active, .btn-minus:active { opacity: 0.75; }
 
-/* Winner icon */
+/* Winner icon (overlay sull'intera riga) */
 .winner-icon {
-  position: absolute; left: 0; top: 0;
-  width: 100%; height: 100%;
+  position: absolute; inset: 0;
   object-fit: contain;
   pointer-events: none;
 }
