@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>Rough Staff</title>
+  <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+
+<!-- ── HOME ── -->
+<div id="home-screen">
+  <img id="home-bg" src="bg-home-horizontal.png" alt="">
+
+  <div class="home-controls">
+    <img id="home-title" src="home-horizontal-titleoff.png" alt="Rough Staff">
+
+    <!-- Numero giocatori -->
+    <div id="players-row">
+      <img id="btn-players-1" src="btn-giocatori-normal1.png" alt="1">
+      <img id="btn-players-2" src="btn-giocatori-normal2.png" alt="2">
+      <img id="btn-players-3" src="btn-giocatori-normal3.png" alt="3">
+      <img id="btn-players-4" src="btn-giocatori-normal4.png" alt="4">
+    </div>
+
+    <!-- Difficoltà -->
+    <div id="diff-row">
+      <img id="btn-diff-righi"    src="btn-difficolta-righi-normal.png"    alt="Righi">
+      <img id="btn-diff-spazi"    src="btn-difficolta-spazi-normal.png"    alt="Spazi">
+      <img id="btn-diff-penta1"   src="btn-difficolta-penta1-normal.png"   alt="Penta 1">
+      <img id="btn-diff-pentafull" src="btn-difficolta-pentafull-normal.png" alt="Penta Full">
+    </div>
+
+    <!-- Lingua + Timer -->
+    <div id="options-row">
+      <img id="btn-lang"  src="btn-home-horizontal-language-it.png" alt="Lingua">
+      <img id="btn-timer" src="btn-home-horizontal-timer-off.png"   alt="Timer">
+    </div>
+
+    <!-- Start -->
+    <img id="btn-start" src="btn-home-horizontal-startoff.png" alt="Start">
+  </div>
+</div>
+
+<!-- ── TRANSIZIONE (bomboletta) ── -->
+<div id="transition-overlay" hidden>
+  <img id="transition-img" src="porta-transizione1.png" alt="">
+</div>
+
+<!-- ── GAME ── -->
+<div id="game-screen" hidden>
+  <img id="game-bg" src="bg-game-horizontal.png" alt="">
+
+  <div class="game-ui">
+    <div id="round-display">1 / 5</div>
+
+    <!-- Controlli centrali -->
+    <img id="note-creator" src="note_creator.png" alt="" hidden>
+    <img id="spot-cover"   src="spot_cover_notes.png" alt="" hidden>
+    <img id="btn-go"       src="btn-reveal.png" alt="GO!"><!-- usa reveal come GO placeholder -->
+    <img id="btn-reveal"   src="btn-reveal.png" alt="Reveal" hidden>
+    <img id="btn-home"     src="btn-minus-pl1.png" alt="Home"><!-- placeholder: sostituire con icona home -->
+
+    <!-- Slot giocatori (1–4) -->
+    <!-- PLAYER 1 -->
+    <div id="player-slot-1" class="player-slot">
+      <img class="player-badge" src="badge-giocatore1.png" alt="P1">
+      <canvas id="staff-canvas-1" class="staff-canvas" width="560" height="120"></canvas>
+      <img id="answer-bar-1" class="answer-bar" src="barra_risposta_it_q_pl1.png" alt="R1" hidden>
+      <img id="score-1" class="score-img" src="pl1-score-0.png" alt="S1">
+      <img id="score-anim-1" class="score-anim" src="animazione-punteggio-pl1.png" alt="" hidden>
+      <img id="btn-plus-1"  class="btn-plus"  src="btn-plus-pl1.png"  alt="+">
+      <img id="btn-minus-1" class="btn-minus" src="btn-minus-pl1.png" alt="-">
+      <img id="winner-icon-1" class="winner-icon" src="note_creator.png" alt="Winner" hidden>
+    </div>
+
+    <!-- PLAYER 2 -->
+    <div id="player-slot-2" class="player-slot">
+      <img class="player-badge" src="badge-giocatore2.png" alt="P2">
+      <canvas id="staff-canvas-2" class="staff-canvas" width="560" height="120"></canvas>
+      <img id="answer-bar-2" class="answer-bar" src="barra_risposta_it_q_pl2.png" alt="R2" hidden>
+      <img id="score-2" class="score-img" src="pl2-score-0.png" alt="S2">
+      <img id="score-anim-2" class="score-anim" src="animazione-punteggio-pl2.png" alt="" hidden>
+      <img id="btn-plus-2"  class="btn-plus"  src="btn-plus-pl2.png"  alt="+">
+      <img id="btn-minus-2" class="btn-minus" src="btn-minus-pl2.png" alt="-">
+      <img id="winner-icon-2" class="winner-icon" src="note_creator.png" alt="Winner" hidden>
+    </div>
+
+    <!-- PLAYER 3 -->
+    <div id="player-slot-3" class="player-slot">
+      <img class="player-badge" src="badge-giocatore3.png" alt="P3">
+      <canvas id="staff-canvas-3" class="staff-canvas" width="560" height="120"></canvas>
+      <img id="answer-bar-3" class="answer-bar" src="barra_risposta_it_q_pl3.png" alt="R3" hidden>
+      <img id="score-3" class="score-img" src="pl3-score-0.png" alt="S3">
+      <img id="score-anim-3" class="score-anim" src="animazione-punteggio-pl3.png" alt="" hidden>
+      <img id="btn-plus-3"  class="btn-plus"  src="btn-plus-pl3.png"  alt="+">
+      <img id="btn-minus-3" class="btn-minus" src="btn-minus-pl3.png" alt="-">
+      <img id="winner-icon-3" class="winner-icon" src="note_creator.png" alt="Winner" hidden>
+    </div>
+
+    <!-- PLAYER 4 -->
+    <div id="player-slot-4" class="player-slot">
+      <img class="player-badge" src="badge-giocatore4.png" alt="P4">
+      <canvas id="staff-canvas-4" class="staff-canvas" width="560" height="120"></canvas>
+      <img id="answer-bar-4" class="answer-bar" src="barra_risposta_it_q_pl4.png" alt="R4" hidden>
+      <img id="score-4" class="score-img" src="pl4-score-0.png" alt="S4">
+      <img id="score-anim-4" class="score-anim" src="animazione-punteggio-pl4.png" alt="" hidden>
+      <img id="btn-plus-4"  class="btn-plus"  src="btn-plus-pl4.png"  alt="+">
+      <img id="btn-minus-4" class="btn-minus" src="btn-minus-pl4.png" alt="-">
+      <img id="winner-icon-4" class="winner-icon" src="note_creator.png" alt="Winner" hidden>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initHome } from './src/js/home.js';
+  import { startGame } from './src/js/game.js';
+
+  const TRANSITION_FRAMES = 4;
+  const FRAME_MS = 120;
+
+  function playTransition(cb) {
+    const overlay = document.getElementById('transition-overlay');
+    const img = document.getElementById('transition-img');
+    overlay.hidden = false;
+    let f = 1;
+    const id = setInterval(() => {
+      f++;
+      if (f > TRANSITION_FRAMES) {
+        clearInterval(id);
+        overlay.hidden = true;
+        cb();
+        return;
+      }
+      img.src = `porta-transizione${f}.png`;
+    }, FRAME_MS);
+  }
+
+  function onStart(state) {
+    playTransition(() => startGame(state, () => initHome(onStart)));
+  }
+
+  initHome(onStart);
+</script>
+</body>
+</html>

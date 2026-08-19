@@ -1,0 +1,185 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: Georgia, serif;
+  background: #10101E;
+}
+
+/* ── SCHERMATE ── */
+#home-screen, #game-screen {
+  position: relative;
+  width: 1280px; height: 768px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* ── HOME ── */
+#home-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.home-controls {
+  position: absolute; inset: 0;
+}
+
+/* Titolo */
+#home-title { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); }
+
+/* Pulsanti giocatori */
+#players-row {
+  position: absolute; top: 108px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 16px;
+}
+
+/* Pulsanti difficoltà */
+#diff-row {
+  position: absolute; top: 230px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 14px;
+}
+
+/* Lingua + Timer */
+#options-row {
+  position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 24px; align-items: center;
+}
+
+/* Start */
+#btn-start {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.home-controls img { cursor: pointer; display: block; }
+.home-controls img:active { opacity: 0.8; }
+
+/* ── TRANSIZIONE ── */
+#transition-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; pointer-events: none;
+}
+#transition-overlay img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── GAME ── */
+#game-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.game-ui { position: absolute; inset: 0; }
+
+/* Round display */
+#round-display {
+  position: absolute; top: 14px; left: 50%;
+  transform: translateX(-50%);
+  color: #F5F2EC; font-size: 22px; letter-spacing: 2px;
+}
+
+/* Note creator + spot cover — area pentagramma comune */
+#note-creator {
+  position: absolute; top: 50px; left: 28px;
+  width: 48px; height: 48px;
+  object-fit: contain;
+}
+#spot-cover {
+  position: absolute; top: 54px; left: 54px;
+  width: 640px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* GO! e REVEAL — centrati in alto */
+#btn-go, #btn-reveal {
+  position: absolute; top: 680px; left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer; z-index: 10;
+}
+
+/* Home button */
+#btn-home {
+  position: absolute; top: 14px; right: 18px;
+  cursor: pointer;
+}
+
+/* ── SLOT GIOCATORE ── */
+/* 4 righe da ~162px ciascuna, partono a y=60 */
+.player-slot {
+  position: absolute; left: 0; right: 0;
+  height: 162px;
+  display: flex; align-items: center;
+}
+#player-slot-1 { top:  58px; }
+#player-slot-2 { top: 222px; }
+#player-slot-3 { top: 386px; }
+#player-slot-4 { top: 550px; }
+
+/* Badge giocatore */
+.player-badge {
+  flex-shrink: 0;
+  width: 110px; height: 140px;
+  object-fit: contain;
+  margin-left: 8px;
+}
+
+/* Canvas pentagramma */
+.staff-canvas {
+  flex: 1;
+  height: 120px;
+  margin: 0 8px;
+}
+
+/* Chiave di violino sopra il canvas (posizionata via JS o assoluta) */
+.clef-img {
+  position: absolute;
+  height: 100px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Barra risposta */
+.answer-bar {
+  flex-shrink: 0;
+  height: 130px;
+  object-fit: contain;
+  cursor: pointer;
+  margin-right: 4px;
+}
+.answer-bar:active { opacity: 0.85; }
+
+/* Score */
+.score-img {
+  flex-shrink: 0;
+  height: 110px;
+  object-fit: contain;
+  margin: 0 4px;
+}
+
+/* Score animation */
+.score-anim {
+  position: absolute; right: 60px;
+  height: 110px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* +/- buttons */
+.btn-plus, .btn-minus {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  object-fit: contain;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+/* Winner icon */
+.winner-icon {
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
