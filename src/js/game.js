@@ -206,7 +206,8 @@ function bindGame(onHome) {
     const bar = document.getElementById(`answer-bar-${i}`);
     bar.addEventListener('click', e => {
       if (!document.getElementById('btn-reveal').hidden) return;
-      const dir = e.offsetX > bar.offsetWidth / 2 ? 1 : -1;
+      // La barra è un overlay 1280px: la zona reale inizia a ~x=987, centro ~1134
+      const dir = e.offsetX > bar.offsetWidth * (1134 / 1280) ? 1 : -1;
       cycleAnswer(i - 1, dir);
     });
   }

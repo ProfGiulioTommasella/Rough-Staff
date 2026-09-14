@@ -2,11 +2,28 @@ import { loadState, saveState } from './state.js';
 import { MULTI_DISABLED } from './notes.js';
 
 let state;
+let titleInterval = null;
 
 export function initHome(onStart) {
   state = loadState();
   renderHome();
+  startTitleAnimation();
   bindHome(onStart);
+}
+
+function startTitleAnimation() {
+  if (titleInterval) clearInterval(titleInterval);
+  const img = document.getElementById('home-title');
+  let on = false;
+  titleInterval = setInterval(() => {
+    on = !on;
+    img.src = on ? 'home-horizontal-titleon.png' : 'home-horizontal-titleoff.png';
+  }, 900);
+}
+
+export function stopTitleAnimation() {
+  clearInterval(titleInterval);
+  titleInterval = null;
 }
 
 function renderHome() {
@@ -80,10 +97,32 @@ function bindHome(onStart) {
     renderHome();
   });
 
-  // Start
+  // Start: animazione starton1→4 poi avvia il gioco
   document.getElementById('btn-start').addEventListener('click', () => {
     if (!state.players || !state.difficulty) return;
     saveState(state);
-    onStart(state);
+    stopTitleAnimation();
+
+    const el = document.getElementById('btn-start');
+    const frames = [
+      { src: 'btn-home-horizontal-starton1.png', clip: 'inset(22.5% 13.3% 34.0% 76.7%)' },
+      { src: 'btn-home-horizontal-starton2.png', clip: 'inset(20.7% 10.3% 34.0% 73.7%)' },
+      { src: 'btn-home-horizontal-starton3.png', clip: 'inset(5.2%  4.4% 20.6% 67.8%)' },
+      { src: 'btn-home-horizontal-starton4.png', clip: 'inset(0.0%  0.0%  0.0% 43.5%)' },
+    ];
+    el.style.pointerEvents = 'none';
+    let f = 0;
+    const id = setInterval(() => {
+      el.src = frames[f].src;
+      el.style.clipPath = frames[f].clip;
+      f++;
+      if (f >= frames.length) {
+        clearInterval(id);
+        el.src = 'btn-home-horizontal-startoff.png';
+        el.style.clipPath = '';
+        el.style.pointerEvents = '';
+        onStart(state);
+      }
+    }, 120);
   });
 }

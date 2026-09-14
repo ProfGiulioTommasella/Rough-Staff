@@ -3,11 +3,10 @@
 html, body {
   width: 100%; height: 100%;
   overflow: hidden;
-  font-family: Georgia, serif;
-  background: #10101E;
+  background: #111;
 }
 
-/* ── SCHERMATE ── */
+/* ── STAGE (1280×768 = dimensioni originali Scratch) ── */
 #home-screen, #game-screen {
   position: relative;
   width: 1280px; height: 768px;
@@ -15,165 +14,163 @@ html, body {
   overflow: hidden;
 }
 
+/* ── SPRITE BASE (overlay full-stage per tutti gli img) ── */
+#home-bg, #game-bg,
+.home-controls img,
+.game-ui > img,
+.player-controls img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 1280px; height: 768px;
+  object-fit: fill;
+}
+
+/* Background: nessun evento */
+#home-bg, #game-bg { pointer-events: none; }
+
 /* ── HOME ── */
-#home-bg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-
-.home-controls { position: absolute; inset: 0; }
-
-#home-title { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); }
-
-#players-row {
-  position: absolute; top: 108px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 16px;
-}
-
-#diff-row {
-  position: absolute; top: 230px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 14px;
-}
-
-#options-row {
-  position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 24px; align-items: center;
-}
-
-#btn-start {
-  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
-  cursor: pointer;
-}
-
-.home-controls img { cursor: pointer; display: block; }
+.home-controls { position: absolute; top:0; left:0; width:1280px; height:768px; }
+.home-controls img { cursor: pointer; }
 .home-controls img:active { opacity: 0.8; }
+
+/* Titolo HOME (animato, non cliccabile) */
+#home-title {
+  pointer-events: none;
+  clip-path: inset(28.4% 25.5% 50.9% 62.9%);
+}
+
+/* Pulsanti numero giocatori */
+#btn-players-1 { clip-path: inset(2.1% 73.3% 76.3% 13.7%); }
+#btn-players-2 { clip-path: inset(2.1% 53.2% 76.3% 33.8%); }
+#btn-players-3 { clip-path: inset(2.1% 32.6% 76.3% 54.4%); }
+#btn-players-4 { clip-path: inset(2.1% 11.3% 76.3% 75.5%); }
+
+/* Bomboletta START */
+#btn-start { clip-path: inset(27.9% 13.4% 34.0% 77.7%); }
+
+/* Difficoltà */
+#btn-diff-spazi     { clip-path: inset(76.4% 68.8% 10.4% 13.4%); }
+#btn-diff-righi     { clip-path: inset(76.4% 48.9% 10.4% 33.5%); }
+#btn-diff-penta1    { clip-path: inset(76.6% 29.2% 10.4% 53.1%); }
+#btn-diff-pentafull { clip-path: inset(76.7%  9.9% 10.2% 72.5%); }
+
+/* Lingua e Timer */
+#btn-lang  { clip-path: inset(30.2% 82.3% 57.7%  3.5%); }
+#btn-timer { clip-path: inset(51.6% 82.3% 35.7%  3.6%); }
 
 /* ── TRANSIZIONE ── */
 #transition-overlay {
   position: fixed; inset: 0; z-index: 100;
   display: flex; align-items: center; justify-content: center;
-  background: transparent; pointer-events: none;
+  pointer-events: none;
 }
-#transition-overlay img { width: 100%; height: 100%; object-fit: cover; }
-
-/* ── GAME ── */
-#game-bg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+#transition-overlay img {
+  position: static;
+  width: 1280px; height: 768px;
   object-fit: cover;
 }
 
-.game-ui { position: absolute; inset: 0; }
+/* ── GAME ── */
+.game-ui { position: absolute; top:0; left:0; width:1280px; height:768px; }
 
-/* Header: round e pulsante home */
+/* Round display (testo, non img) */
 #round-display {
-  position: absolute; top: 10px; left: 50%;
-  transform: translateX(-50%);
-  color: #F5F2EC; font-size: 22px; letter-spacing: 2px;
+  position: absolute; top: 10px; left: 20px;
+  color: #F5F2EC; font-size: 20px; letter-spacing: 1px;
+  font-family: Georgia, serif; pointer-events: none; z-index: 5;
 }
 
-#btn-home {
-  position: absolute; top: 8px; right: 16px;
-  cursor: pointer;
+/* Titolo decorativo GAME (non cliccabile) */
+#game-title {
+  pointer-events: none;
+  clip-path: inset(28.4% 25.5% 50.9% 62.9%);
 }
 
-/* ── AREA PENTAGRAMMA ── */
+/* ── AREA PENTAGRAMMA (trasparente: il foglio è già nel background) ── */
 #staff-area {
   position: absolute;
-  top: 44px; left: 20px; right: 20px;
-  height: 180px;
+  top: 70px; left: 30px;
+  width: 825px; height: 582px;
+  background: transparent;
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  z-index: 2;
 }
 
 #staff-canvas {
   display: block;
-  width: 100%; height: 160px;
-  background: #fff;
-  border-radius: 4px;
+  width: 800px; height: 400px;
+  position: relative; z-index: 2;
 }
 
-/* Note creator: animazione dopo GO */
+/* Note creator e Spot cover (overlay full-stage, non dentro staff-area) */
 #note-creator {
-  position: absolute; top: 4px; left: 0;
-  height: 50px;
-  object-fit: contain;
   pointer-events: none;
+  clip-path: inset(29.9% 38.0% 30.1% 38.0%);
+  z-index: 3;
 }
-
-/* Spot cover: copre le note dopo 3.5s (joker) */
 #spot-cover {
-  position: absolute; top: 0; left: 72px; right: 0;
-  height: 160px;
-  object-fit: fill;
   pointer-events: none;
+  clip-path: inset(26.0% 33.4% 26.2% 41.0%);
+  z-index: 3;
 }
 
-/* GO! e REVEAL — centrati in basso */
-#btn-go, #btn-reveal {
-  position: absolute; bottom: 14px; left: 50%;
-  transform: translateX(-50%);
-  cursor: pointer; z-index: 10;
-}
+/* ── PULSANTI GAME ── */
+#btn-go    { clip-path: inset(82.0% 78.8% 0.0%  6.0%); cursor: pointer; z-index: 4; }
+#btn-reveal { clip-path: inset(80.7% 61.0% 0.0% 23.8%); cursor: pointer; z-index: 4; }
+#btn-home  { clip-path: inset(84.8% 47.5% 0.0% 43.5%); cursor: pointer; z-index: 4; }
+#btn-go:active, #btn-reveal:active, #btn-home:active { opacity: 0.8; }
 
-/* ── RIGA CONTROLLI GIOCATORE ── */
-/* 4 righe da 120px a partire da y=230 */
+/* ── CONTROLLI GIOCATORI ── */
+/* Wrapper trasparente: nasconde/mostra tutti gli elementi del giocatore N */
 .player-controls {
-  position: absolute; left: 0; right: 0;
-  height: 120px;
-  display: flex; align-items: center;
-  padding: 0 16px;
-  gap: 12px;
+  position: absolute; top:0; left:0;
+  width: 1280px; height: 768px;
+  pointer-events: none; /* i figli cliccabili sovrascrivono con auto */
+  z-index: 5;
 }
 
-#player-controls-1 { top: 230px; }
-#player-controls-2 { top: 352px; }
-#player-controls-3 { top: 474px; }
-#player-controls-4 { top: 596px; }
+/* Badge (decorativo) */
+#player-controls-1 .player-badge { clip-path: inset(5.9% 11.6% 76.0% 69.9%); }
+#player-controls-2 .player-badge { clip-path: inset(29.2% 11.3% 53.4% 69.9%); }
+#player-controls-3 .player-badge { clip-path: inset(51.8% 11.2% 30.9% 69.9%); }
+#player-controls-4 .player-badge { clip-path: inset(72.0% 11.0% 10.5% 69.9%); }
 
-/* Badge */
-.player-badge {
-  flex-shrink: 0;
-  height: 100px;
-  object-fit: contain;
-}
+/* Punteggio */
+#score-1 { clip-path: inset(11.2%  4.0% 76.2% 78.1%); }
+#score-2 { clip-path: inset(33.7%  4.0% 53.5% 78.1%); }
+#score-3 { clip-path: inset(56.4%  4.0% 30.9% 78.1%); }
+#score-4 { clip-path: inset(75.9%  4.0% 11.3% 78.1%); }
 
-/* Barra risposta */
-.answer-bar {
-  flex: 1;
-  max-width: 220px;
-  height: 110px;
-  object-fit: contain;
-  cursor: pointer;
-}
+/* Animazione punteggio */
+#score-anim-1 { clip-path: inset(0.0%   0.0% 75.3% 69.9%); pointer-events:none; }
+#score-anim-2 { clip-path: inset(20.2%  0.0% 52.6% 69.9%); pointer-events:none; }
+#score-anim-3 { clip-path: inset(42.7%  0.0% 29.9% 69.9%); pointer-events:none; }
+#score-anim-4 { clip-path: inset(62.8%  0.0% 10.0% 69.9%); pointer-events:none; }
+
+/* Barra risposta (cliccabile) */
+.answer-bar { pointer-events: auto; cursor: pointer; }
 .answer-bar:active { opacity: 0.85; }
+#answer-bar-1 { clip-path: inset(11.8%  0.0% 76.0% 77.1%); }
+#answer-bar-2 { clip-path: inset(34.8%  0.0% 53.1% 77.2%); }
+#answer-bar-3 { clip-path: inset(57.3%  0.0% 30.6% 77.3%); }
+#answer-bar-4 { clip-path: inset(77.0%  0.0% 10.9% 77.3%); }
 
-/* Score */
-.score-img {
-  flex-shrink: 0;
-  height: 90px;
-  object-fit: contain;
-}
-
-/* Score animation (overlay) */
-.score-anim {
-  position: absolute; right: 100px;
-  height: 90px;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-/* Pulsanti ± */
-.btn-plus, .btn-minus {
-  flex-shrink: 0;
-  width: 38px; height: 38px;
-  object-fit: contain;
-  cursor: pointer;
-}
+/* Pulsanti ± (cliccabili) */
+.btn-plus, .btn-minus { pointer-events: auto; cursor: pointer; }
 .btn-plus:active, .btn-minus:active { opacity: 0.75; }
+#btn-plus-1  { clip-path: inset(12.4% 22.8% 81.9% 73.8%); }
+#btn-minus-1 { clip-path: inset(18.2% 22.8% 76.0% 73.8%); }
+#btn-plus-2  { clip-path: inset(34.4% 22.7% 59.9% 73.8%); }
+#btn-minus-2 { clip-path: inset(40.2% 22.7% 54.0% 73.8%); }
+#btn-plus-3  { clip-path: inset(57.0% 22.8% 37.2% 73.8%); }
+#btn-minus-3 { clip-path: inset(62.9% 22.8% 31.4% 73.8%); }
+#btn-plus-4  { clip-path: inset(77.9% 22.7% 16.4% 73.8%); }
+#btn-minus-4 { clip-path: inset(83.7% 22.7% 10.5% 73.8%); }
 
-/* Winner icon (overlay sull'intera riga) */
+/* Icona vincitore (al centro dello stage) */
 .winner-icon {
-  position: absolute; inset: 0;
-  object-fit: contain;
+  clip-path: inset(34.6% 40.1% 32.4% 39.7%);
   pointer-events: none;
 }

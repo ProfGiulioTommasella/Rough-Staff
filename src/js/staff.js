@@ -1,18 +1,17 @@
 // Rendering pentagramma condiviso: una chiave, N note separate da stanghette di battuta
 import { NOTE_Y, LEDGER_NOTES } from './notes.js';
 
-const HEAD_W = 13;
-const HEAD_H = 10;
+const HEAD_W = 20;
+const HEAD_H = 15;
 const STAFF_COLOR = '#234EA0';
-const LINE_W = 1.5;
-const BAR_W  = 2;
-const CLEF_W = 72;   // area riservata alla chiave di violino
-const PAD_L  = 12;
-const PAD_R  = 12;
+const LINE_W = 2;
+const BAR_W  = 3;
+const CLEF_W = 108;  // area riservata alla chiave di violino
+const PAD_L  = 16;
+const PAD_R  = 16;
 
-// Posizioni Y delle 5 righe in NOTE_Y space (positivo = giù sul canvas)
-// Derivate dai valori NOTE_Y delle note che cadono sulle righe
-const LINE_OFFSETS = [42, 20, 0, -20, -40];
+// Posizioni Y delle 5 righe (scalate ×1.5 rispetto all'originale, step 30px)
+const LINE_OFFSETS = [63, 30, 0, -30, -60];
 
 const clefImg = new Image();
 clefImg.src = 'chiave-violino.svg';
