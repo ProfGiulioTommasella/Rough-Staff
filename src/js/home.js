@@ -57,6 +57,9 @@ function renderHome() {
   document.getElementById('btn-timer').src = state.timer
     ? 'btn-home-horizontal-timer-on.png'
     : 'btn-home-horizontal-timer-off.png';
+
+  // Pulsante START: visibile solo quando giocatori e difficoltà sono entrambi selezionati
+  document.getElementById('btn-start').hidden = !(state.players && state.difficulty);
 }
 
 function bindHome(onStart) {
