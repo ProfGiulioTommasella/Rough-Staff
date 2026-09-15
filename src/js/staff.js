@@ -36,12 +36,28 @@ function drawLines(ctx, w, h) {
 
 function drawClef(ctx, h) {
   if (!clefImg.complete || clefImg.naturalWidth === 0) return;
-  const staffSpan = LINE_OFFSETS[0] - LINE_OFFSETS[LINE_OFFSETS.length - 1]; // 82px
-  const clefH = staffSpan + 42;
-  const clefW = clefH * 0.38;
+
+  // Il SVG ha viewBox 1920×1152 ma la chiave occupa solo x=94-287, y=344-805
+  // Usiamo drawImage a 9 argomenti per ritagliare quella regione
+  const vbW = 1920, vbH = 1152;
+  const imgW = clefImg.naturalWidth, imgH = clefImg.naturalHeight;
+  const sx = (94  / vbW) * imgW;
+  const sy = (344 / vbH) * imgH;
+  const sw = (193 / vbW) * imgW;   // 287-94
+  const sh = (461 / vbH) * imgH;   // 805-344
+
   const cy = h / 2;
-  const top = cy + LINE_OFFSETS[0] - staffSpan * 0.55;
-  ctx.drawImage(clefImg, PAD_L + 2, top, clefW, clefH);
+  const step = LINE_OFFSETS[1] - LINE_OFFSETS[2]; // 30px
+  const staffTop    = cy + LINE_OFFSETS[LINE_OFFSETS.length - 1]; // cy - 60
+  const staffBottom = cy + LINE_OFFSETS[0];                       // cy + 63
+
+  // La chiave si estende 2 step sopra la linea 5 e 1 step sotto la linea 1
+  const clefTop    = staffTop - 2 * step;      // cy - 120
+  const clefBottom = staffBottom + step;        // cy + 93
+  const clefH = clefBottom - clefTop;           // ~213px
+  const clefW = clefH * (193 / 461);            // mantieni aspect ratio
+
+  ctx.drawImage(clefImg, sx, sy, sw, sh, PAD_L + 2, clefTop, clefW, clefH);
 }
 
 function drawBarline(ctx, x, h) {
