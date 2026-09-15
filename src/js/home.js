@@ -100,33 +100,12 @@ function bindHome(onStart) {
     renderHome();
   });
 
-  // Start: animazione starton1→4 poi avvia il gioco
+  // Start: click diretto senza animazione starton (eliminata per evitare artefatti visivi)
   document.getElementById('btn-start').addEventListener('click', () => {
     if (!state.players || !state.difficulty) return;
     saveState(state);
     stopTitleAnimation();
-
-    const el = document.getElementById('btn-start');
-    const frames = [
-      { src: 'btn-home-horizontal-starton1.png', clip: 'inset(22.5% 13.3% 34.0% 76.7%)' },
-      { src: 'btn-home-horizontal-starton2.png', clip: 'inset(20.7% 10.3% 34.0% 73.7%)' },
-      { src: 'btn-home-horizontal-starton3.png', clip: 'inset(5.2%  4.4% 20.6% 67.8%)' },
-      { src: 'btn-home-horizontal-starton4.png', clip: 'inset(0.0%  0.0%  0.0% 43.5%)' },
-    ];
-    el.style.pointerEvents = 'none';
-    let f = 0;
-    const id = setInterval(() => {
-      el.src = frames[f].src;
-      el.style.clipPath = frames[f].clip;
-      f++;
-      if (f >= frames.length) {
-        clearInterval(id);
-        el.hidden = true;
-        el.src = 'btn-home-horizontal-startoff.png';
-        el.style.clipPath = '';
-        el.style.pointerEvents = '';
-        onStart(state);
-      }
-    }, 120);
+    document.getElementById('btn-start').hidden = true;
+    onStart(state);
   });
 }
