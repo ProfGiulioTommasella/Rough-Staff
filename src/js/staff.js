@@ -2,7 +2,7 @@
 import { NOTE_Y, LEDGER_NOTES } from './notes.js';
 
 const HEAD_W = 36;
-const HEAD_H = 30;
+const HEAD_H = 26;
 const STAFF_COLOR = '#234EA0';
 const LINE_W = 2;
 const BAR_W  = 3;
