@@ -121,6 +121,7 @@ function bindHome(onStart) {
       f++;
       if (f >= frames.length) {
         clearInterval(id);
+        el.hidden = true;
         el.src = 'btn-home-horizontal-startoff.png';
         el.style.clipPath = '';
         el.style.pointerEvents = '';
