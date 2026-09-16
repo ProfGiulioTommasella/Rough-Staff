@@ -32,11 +32,6 @@
   </div>
 </div>
 
-<!-- ── TRANSIZIONE ── -->
-<div id="transition-overlay" hidden>
-  <img id="transition-img" src="porta-transizione1.png" alt="">
-</div>
-
 <!-- ── GAME ── -->
 <div id="game-screen" hidden>
   <img id="game-bg" src="schermata_game.png" alt="">
@@ -114,28 +109,8 @@
   import { initHome } from './src/js/home.js';
   import { startGame } from './src/js/game.js';
 
-  const TRANSITION_FRAMES = 4;
-  const FRAME_MS = 120;
-
-  function playTransition(cb) {
-    const overlay = document.getElementById('transition-overlay');
-    const img = document.getElementById('transition-img');
-    overlay.hidden = false;
-    let f = 1;
-    const id = setInterval(() => {
-      f++;
-      if (f > TRANSITION_FRAMES) {
-        clearInterval(id);
-        overlay.hidden = true;
-        cb();
-        return;
-      }
-      img.src = `porta-transizione${f}.png`;
-    }, FRAME_MS);
-  }
-
   function onStart(state) {
-    playTransition(() => startGame(state, () => initHome(onStart)));
+    startGame(state, () => initHome(onStart));
   }
 
   initHome(onStart);
