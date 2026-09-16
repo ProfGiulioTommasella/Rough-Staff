@@ -179,8 +179,9 @@ html, body {
   filter: grayscale(1) brightness(0.75);
 }
 
-/* Icona vincitore (al centro dello stage) */
-.winner-icon {
-  clip-path: inset(34.6% 40.1% 32.4% 39.7%);
-  pointer-events: none;
-}
+/* Icona vincitore — sovrapposta alla bomboletta del giocatore */
+.winner-icon { pointer-events: none; }
+#winner-icon-1 { clip-path: inset(5.9% 11.6% 76.0% 69.9%); }
+#winner-icon-2 { clip-path: inset(29.2% 11.3% 53.4% 69.9%); }
+#winner-icon-3 { clip-path: inset(51.8% 11.2% 30.9% 69.9%); }
+#winner-icon-4 { clip-path: inset(72.0% 11.0% 10.5% 69.9%); }
