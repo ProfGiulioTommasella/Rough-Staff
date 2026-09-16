@@ -3,6 +3,7 @@ import { drawStaff, drawStaffCovered } from './staff.js';
 
 const TOTAL_ROUNDS = 5;
 const TIMER_MS = 3500;
+const NOTE_CREATOR_MS = 2000;
 
 let cfg;          // { players, difficulty, timer, lang }
 let scores;       // [0, 0, 0, 0]
@@ -10,6 +11,7 @@ let round;        // 1–5
 let notes;        // nota assegnata per player (array)
 let answers;      // risposta corrente per player ('q' o nome nota)
 let timerHandle;
+let noteCreatorHandle;
 let bound = false;
 
 // --- Entry point ---
@@ -47,13 +49,14 @@ function startRound() {
   updateRoundDisplay();
 }
 
-// Sorteggia una nota diversa per ogni giocatore
+// Prima nota casuale; ogni nota successiva ≠ dalla precedente
 function drawNotes() {
-  const pool = [...DIFFICULTY_SETS[cfg.difficulty]];
+  const pool = DIFFICULTY_SETS[cfg.difficulty];
   const result = [];
   for (let i = 0; i < cfg.players; i++) {
-    const idx = Math.floor(Math.random() * pool.length);
-    result.push(pool.splice(idx, 1)[0]);
+    const prev = result[i - 1];
+    const available = pool.length > 1 ? pool.filter(n => n !== prev) : pool;
+    result.push(available[Math.floor(Math.random() * available.length)]);
   }
   return result;
 }
@@ -62,8 +65,11 @@ function drawNotes() {
 function onGo() {
   document.getElementById('btn-go').hidden = true;
   document.getElementById('note-creator').hidden = false;
-
   drawStaff(document.getElementById('staff-canvas'), notes, cfg.players);
+
+  noteCreatorHandle = setTimeout(() => {
+    document.getElementById('note-creator').hidden = true;
+  }, NOTE_CREATOR_MS);
 
   for (let i = 0; i < cfg.players; i++) {
     document.getElementById(`answer-bar-${i + 1}`).hidden = false;
@@ -104,6 +110,7 @@ function checkAllAnswered() {
 // --- REVEAL ---
 function onReveal() {
   clearTimeout(timerHandle);
+  clearTimeout(noteCreatorHandle);
   document.getElementById('spot-cover').hidden = true;
   document.getElementById('btn-reveal').hidden = true;
   document.getElementById('note-creator').hidden = true;
@@ -115,10 +122,13 @@ function onReveal() {
   for (let i = 0; i < cfg.players; i++) {
     const correctKey = cfg.lang === 'it' ? NOTE_TO_BAR_IT[notes[i]] : NOTE_TO_BAR_EN[notes[i]];
     setAnswerBar(i, correctKey);
-
+    const bar = document.getElementById(`answer-bar-${i + 1}`);
     if (answers[i] === correctKey) {
       scores[i] = Math.min(5, scores[i] + 1);
       flashScore(i);
+      bar.classList.add('answer-correct');
+    } else {
+      bar.classList.add('answer-wrong');
     }
   }
 
@@ -173,7 +183,9 @@ function flashScore(playerIdx) {
 
 function hideAnswerBars() {
   for (let i = 1; i <= 4; i++) {
-    document.getElementById(`answer-bar-${i}`).hidden = true;
+    const bar = document.getElementById(`answer-bar-${i}`);
+    bar.hidden = true;
+    bar.classList.remove('answer-correct', 'answer-wrong');
   }
 }
 
@@ -198,6 +210,7 @@ function bindGame(onHome) {
   document.getElementById('btn-reveal').addEventListener('click', onReveal);
   document.getElementById('btn-home').addEventListener('click', () => {
     clearTimeout(timerHandle);
+    clearTimeout(noteCreatorHandle);
     document.getElementById('game-screen').hidden = true;
     document.getElementById('home-screen').hidden = false;
     for (let i = 1; i <= 4; i++) {

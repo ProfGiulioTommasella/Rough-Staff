@@ -169,6 +169,10 @@ html, body {
 #btn-plus-4  { clip-path: inset(77.9% 22.7% 16.4% 73.8%); }
 #btn-minus-4 { clip-path: inset(83.7% 22.7% 10.5% 73.8%); }
 
+/* Feedback REVEAL: verde = giusto, rosso = sbagliato */
+.answer-correct { filter: sepia(1) saturate(6) hue-rotate(85deg) brightness(1.1); }
+.answer-wrong   { filter: sepia(1) saturate(6) hue-rotate(-30deg) brightness(0.9); }
+
 /* Giocatori inattivi: badge e punteggio visibili ma in grigio */
 .player-inactive .player-badge,
 .player-inactive .score-img {
