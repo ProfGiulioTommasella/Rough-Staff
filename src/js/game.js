@@ -49,13 +49,13 @@ function startRound() {
   updateRoundDisplay();
 }
 
-// Prima nota casuale; ogni nota successiva ≠ dalla precedente
+// Ogni giocatore riceve una nota diversa da tutti gli altri
 function drawNotes() {
   const pool = DIFFICULTY_SETS[cfg.difficulty];
   const result = [];
   for (let i = 0; i < cfg.players; i++) {
-    const prev = result[i - 1];
-    const available = pool.length > 1 ? pool.filter(n => n !== prev) : pool;
+    const remaining = pool.filter(n => !result.includes(n));
+    const available = remaining.length > 0 ? remaining : pool;
     result.push(available[Math.floor(Math.random() * available.length)]);
   }
   return result;
