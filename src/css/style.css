@@ -169,6 +169,12 @@ html, body {
 #btn-plus-4  { clip-path: inset(77.9% 22.7% 16.4% 73.8%); }
 #btn-minus-4 { clip-path: inset(83.7% 22.7% 10.5% 73.8%); }
 
+/* Giocatori inattivi: badge e punteggio visibili ma in grigio */
+.player-inactive .player-badge,
+.player-inactive .score-img {
+  filter: grayscale(1) brightness(0.75);
+}
+
 /* Icona vincitore (al centro dello stage) */
 .winner-icon {
   clip-path: inset(34.6% 40.1% 32.4% 39.7%);

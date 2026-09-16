@@ -157,10 +157,9 @@ function setAnswerBar(playerIdx, noteKey) {
 
 function renderScores() {
   for (let i = 0; i < 4; i++) {
-    const el      = document.getElementById(`score-${i + 1}`);
-    const visible = i < cfg.players;
-    el.hidden = !visible;
-    if (visible) el.src = `pl${i + 1}-score-${scores[i]}.png`;
+    const el = document.getElementById(`score-${i + 1}`);
+    el.hidden = false;
+    el.src = `pl${i + 1}-score-${i < cfg.players ? scores[i] : 0}.png`;
   }
 }
 
@@ -178,8 +177,12 @@ function hideAnswerBars() {
 
 function renderPlayerVisibility() {
   for (let i = 1; i <= 4; i++) {
-    const visible = i <= cfg.players;
-    document.getElementById(`player-controls-${i}`).hidden = !visible;
+    const active = i <= cfg.players;
+    const controls = document.getElementById(`player-controls-${i}`);
+    controls.hidden = false;
+    controls.classList.toggle('player-inactive', !active);
+    document.getElementById(`btn-plus-${i}`).hidden = !active;
+    document.getElementById(`btn-minus-${i}`).hidden = !active;
   }
 }
 
