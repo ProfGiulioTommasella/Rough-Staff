@@ -32,7 +32,7 @@ function startRound() {
   answers = Array(cfg.players).fill('q');
 
   const canvas = document.getElementById('staff-canvas');
-  drawStaff(canvas, notes, cfg.players);
+  drawStaff(canvas, [], cfg.players);
 
   for (let i = 0; i < cfg.players; i++) {
     setAnswerBar(i, 'q');
@@ -62,6 +62,8 @@ function drawNotes() {
 function onGo() {
   document.getElementById('btn-go').hidden = true;
   document.getElementById('note-creator').hidden = false;
+
+  drawStaff(document.getElementById('staff-canvas'), notes, cfg.players);
 
   for (let i = 0; i < cfg.players; i++) {
     document.getElementById(`answer-bar-${i + 1}`).hidden = false;
