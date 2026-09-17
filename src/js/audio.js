@@ -9,16 +9,17 @@ export function playClick() {
   try {
     const ac = getCtx();
     const play = () => {
-      const len = Math.ceil(ac.sampleRate * 0.04);
+      const len = Math.ceil(ac.sampleRate * 0.02); // 20ms
       const buf = ac.createBuffer(1, len, ac.sampleRate);
       const d = buf.getChannelData(0);
       for (let i = 0; i < len; i++) {
-        d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.15));
+        const t = i / ac.sampleRate;
+        d[i] = Math.sin(2 * Math.PI * 1100 * t) * Math.exp(-t / 0.003);
       }
       const src = ac.createBufferSource();
       src.buffer = buf;
       const g = ac.createGain();
-      g.gain.value = 0.3;
+      g.gain.value = 0.45;
       src.connect(g);
       g.connect(ac.destination);
       src.start();

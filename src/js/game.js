@@ -22,6 +22,7 @@ export function startGame(state, onHome) {
   round = 0;
   document.getElementById('home-screen').hidden = true;
   document.getElementById('game-screen').hidden = false;
+  document.getElementById('btn-home').hidden = true;
   renderScores();
   renderPlayerVisibility();
   if (!bound) { bindGame(onHome); bound = true; }
@@ -166,6 +167,7 @@ function endGame() {
     }
   }
   document.getElementById('btn-go').hidden = true;
+  document.getElementById('btn-home').hidden = false;
 }
 
 function adjustScore(playerIdx, delta) {
@@ -207,8 +209,8 @@ function renderPlayerVisibility() {
     const controls = document.getElementById(`player-controls-${i}`);
     controls.hidden = false;
     controls.classList.toggle('player-inactive', !active);
-    document.getElementById(`btn-plus-${i}`).hidden = !active;
-    document.getElementById(`btn-minus-${i}`).hidden = !active;
+    document.getElementById(`btn-plus-${i}`).hidden = true;
+    document.getElementById(`btn-minus-${i}`).hidden = true;
   }
 }
 
