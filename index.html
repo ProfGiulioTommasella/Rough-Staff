@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1280">
   <title>Rough Staff</title>
-  <link rel="stylesheet" href="src/css/style.css?v=6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap">
+  <link rel="stylesheet" href="src/css/style.css?v=7">
 </head>
 <body>
 
@@ -21,7 +24,7 @@
     <img id="btn-players-4" src="btn-giocatori-normal4.png" alt="4">
 
     <img id="btn-lang"  src="btn-home-horizontal-language-it.png" alt="Lingua">
-    <img id="btn-timer" src="btn-home-horizontal-timer-off.png"   alt="Timer">
+    <img id="btn-timer" src="btn-home-horizontal-timer-off.png"   alt="Timer" hidden>
 
     <img id="btn-start" src="btn-home-horizontal-startoff.png" alt="Start" hidden>
 
@@ -106,8 +109,8 @@
 </div>
 
 <script type="module">
-  import { initHome } from './src/js/home.js?v=6';
-  import { startGame } from './src/js/game.js?v=6';
+  import { initHome } from './src/js/home.js?v=7';
+  import { startGame } from './src/js/game.js?v=7';
 
   function onStart(state) {
     startGame(state, () => initHome(onStart));

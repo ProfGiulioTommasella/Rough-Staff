@@ -118,12 +118,12 @@ export function drawStaff(canvas, notesArray, playerCount) {
 
     // Numero giocatore sopra ogni sezione (stile graffiti)
     const numX = sectionStart + sectionW * 0.5;
-    const numY = staffTopY - 28;
-    ctx.font = 'bold 40px Impact, Arial Black, sans-serif';
+    const numY = staffTopY - 52;
+    ctx.font = '58px "Black Ops One", Impact, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 7;
     ctx.lineJoin = 'round';
     ctx.strokeText(String(i + 1), numX, numY);
     ctx.fillStyle = '#1a1a2e';
@@ -140,6 +140,13 @@ export function drawStaff(canvas, notesArray, playerCount) {
   // Se la chiave non era ancora pronta, ridisegna al caricamento
   if (!clefImg.complete) {
     clefImg.onload = () => drawStaff(canvas, notesArray, playerCount);
+  }
+
+  // Se "Black Ops One" non è ancora caricato, ridisegna quando pronto
+  if (document.fonts && !document.fonts.check('58px "Black Ops One"')) {
+    document.fonts.load('58px "Black Ops One"').then(() => {
+      drawStaff(canvas, notesArray, playerCount);
+    }).catch(() => {});
   }
 }
 
