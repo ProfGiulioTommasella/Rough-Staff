@@ -116,12 +116,18 @@ export function drawStaff(canvas, notesArray, playerCount) {
     // Stanghetta di battuta al termine di ogni sezione
     drawBarline(ctx, sectionStart + sectionW, h);
 
-    // Numero giocatore sopra ogni sezione
-    ctx.fillStyle = '#000';
-    ctx.font = 'bold 22px Georgia, serif';
+    // Numero giocatore sopra ogni sezione (stile graffiti)
+    const numX = sectionStart + sectionW * 0.5;
+    const numY = staffTopY - 28;
+    ctx.font = 'bold 40px Impact, Arial Black, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    ctx.fillText(String(i + 1), sectionStart + sectionW * 0.5, staffTopY - 8);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 5;
+    ctx.lineJoin = 'round';
+    ctx.strokeText(String(i + 1), numX, numY);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillText(String(i + 1), numX, numY);
 
     if (notesArray && notesArray[i] != null) {
       const noteX = sectionStart + sectionW * 0.52;

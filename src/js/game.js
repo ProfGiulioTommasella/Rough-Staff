@@ -6,7 +6,7 @@ const TOTAL_ROUNDS = 5;
 const TIMER_MS = 3500;
 const TX_START = -900;
 const TX_END = 850;
-const ANIM_DURATION_MS = 1200;
+const ANIM_DURATION_MS = 2800;
 const CANVAS_LEFT_IN_STAGE = 42.5;
 
 let cfg;
@@ -142,8 +142,8 @@ function startNoteCreatorAnim(canvas, notesArray, playerCount) {
 
     creator.style.transform = `translateX(${tx}px)`;
 
-    // Character center in stage coords: clip starts at 38% of 1280 = 486px
-    const charCenter = 486 + 640 + tx; // center of visible creator image
+    // Character center in stage coords: center of visible clip window
+    const charCenter = 640 + tx;
 
     let anyNewReveal = false;
     for (let i = 0; i < playerCount; i++) {
