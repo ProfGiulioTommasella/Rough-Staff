@@ -1,20 +1,21 @@
 import { DIFFICULTY_SETS, ANSWER_ORDER_IT, ANSWER_ORDER_EN, NOTE_TO_BAR_IT, NOTE_TO_BAR_EN } from './notes.js';
 import { drawStaff, drawStaffCovered } from './staff.js';
+import { playClick } from './audio.js';
 
 const TOTAL_ROUNDS = 5;
 const TIMER_MS = 3500;
 const NOTE_CREATOR_MS = 2000;
 
-let cfg;          // { players, difficulty, timer, lang }
-let scores;       // [0, 0, 0, 0]
-let round;        // 1–5
-let notes;        // nota assegnata per player (array)
-let answers;      // risposta corrente per player ('q' o nome nota)
+let cfg;
+let scores;
+let round;
+let notes;
+let answers;
+let phase = 'setup'; // 'setup' | 'answering' | 'revealed'
 let timerHandle;
 let noteCreatorHandle;
 let bound = false;
 
-// --- Entry point ---
 export function startGame(state, onHome) {
   cfg = state;
   scores = [0, 0, 0, 0];
@@ -27,9 +28,9 @@ export function startGame(state, onHome) {
   startRound();
 }
 
-// --- Round ---
 function startRound() {
   round++;
+  phase = 'setup';
   notes = drawNotes();
   answers = Array(cfg.players).fill('q');
 
@@ -61,8 +62,18 @@ function drawNotes() {
   return result;
 }
 
-// --- GO! ---
 function onGo() {
+  playClick();
+
+  if (phase === 'revealed') {
+    // GO dopo il reveal → round successivo
+    hideAnswerBars();
+    startRound();
+    return;
+  }
+
+  // phase === 'setup' → mostra le note, avvia la fase di risposta
+  phase = 'answering';
   document.getElementById('btn-go').hidden = true;
   document.getElementById('note-creator').hidden = false;
   drawStaff(document.getElementById('staff-canvas'), notes, cfg.players);
@@ -84,7 +95,6 @@ function onGo() {
   }
 }
 
-// --- Gestione risposta ---
 function cycleAnswer(playerIdx, direction) {
   const order = cfg.lang === 'it' ? ANSWER_ORDER_IT : ANSWER_ORDER_EN;
   const current = answers[playerIdx];
@@ -107,15 +117,15 @@ function checkAllAnswered() {
   document.getElementById('btn-reveal').hidden = !allAnswered;
 }
 
-// --- REVEAL ---
 function onReveal() {
+  playClick();
+  phase = 'revealed';
   clearTimeout(timerHandle);
   clearTimeout(noteCreatorHandle);
   document.getElementById('spot-cover').hidden = true;
   document.getElementById('btn-reveal').hidden = true;
   document.getElementById('note-creator').hidden = true;
 
-  // Ridisegna il pentagramma con le note (in caso fossero coperte)
   const canvas = document.getElementById('staff-canvas');
   drawStaff(canvas, notes, cfg.players);
 
@@ -132,18 +142,16 @@ function onReveal() {
     }
   }
 
-  setTimeout(() => {
-    renderScores();
-    hideAnswerBars();
-    if (round >= TOTAL_ROUNDS) {
-      endGame();
-    } else {
-      setTimeout(startRound, 1200);
-    }
-  }, 1800);
+  renderScores();
+
+  if (round >= TOTAL_ROUNDS) {
+    endGame();
+  } else {
+    // Mostra GO per passare al round successivo
+    document.getElementById('btn-go').hidden = false;
+  }
 }
 
-// --- Fine partita ---
 function endGame() {
   const maxScore = Math.max(...scores.slice(0, cfg.players));
   for (let i = 0; i < cfg.players; i++) {
@@ -154,15 +162,13 @@ function endGame() {
   document.getElementById('btn-go').hidden = true;
 }
 
-// --- Punteggio manuale (±) ---
 function adjustScore(playerIdx, delta) {
   scores[playerIdx] = Math.max(0, Math.min(5, scores[playerIdx] + delta));
   renderScores();
 }
 
-// --- Render helpers ---
 function setAnswerBar(playerIdx, noteKey) {
-  const pl  = playerIdx + 1;
+  const pl = playerIdx + 1;
   const img = document.getElementById(`answer-bar-${pl}`);
   img.src = `barra_risposta_${cfg.lang}_${noteKey}_pl${pl}.png`;
 }
@@ -204,13 +210,15 @@ function updateRoundDisplay() {
   document.getElementById('round-display').textContent = `${round} / ${TOTAL_ROUNDS}`;
 }
 
-// --- Binding eventi (eseguito una sola volta) ---
 function bindGame(onHome) {
   document.getElementById('btn-go').addEventListener('click', onGo);
   document.getElementById('btn-reveal').addEventListener('click', onReveal);
   document.getElementById('btn-home').addEventListener('click', () => {
+    playClick();
     clearTimeout(timerHandle);
     clearTimeout(noteCreatorHandle);
+    phase = 'setup';
+    hideAnswerBars();
     document.getElementById('game-screen').hidden = true;
     document.getElementById('home-screen').hidden = false;
     for (let i = 1; i <= 4; i++) {
@@ -223,8 +231,8 @@ function bindGame(onHome) {
   for (let i = 1; i <= 4; i++) {
     const bar = document.getElementById(`answer-bar-${i}`);
     bar.addEventListener('click', e => {
-      if (!document.getElementById('btn-reveal').hidden) return;
-      // La barra è un overlay 1280px: la zona reale inizia a ~x=987, centro ~1134
+      if (phase !== 'answering') return;
+      playClick();
       const dir = e.offsetX > bar.offsetWidth * (1134 / 1280) ? 1 : -1;
       cycleAnswer(i - 1, dir);
     });
@@ -232,8 +240,8 @@ function bindGame(onHome) {
 
   for (let i = 1; i <= 4; i++) {
     document.getElementById(`btn-plus-${i}`)
-      .addEventListener('click', () => adjustScore(i - 1, 1));
+      .addEventListener('click', () => { playClick(); adjustScore(i - 1, 1); });
     document.getElementById(`btn-minus-${i}`)
-      .addEventListener('click', () => adjustScore(i - 1, -1));
+      .addEventListener('click', () => { playClick(); adjustScore(i - 1, -1); });
   }
 }
