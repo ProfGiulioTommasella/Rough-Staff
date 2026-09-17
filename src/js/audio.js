@@ -19,7 +19,7 @@ export function playClick() {
       const src = ac.createBufferSource();
       src.buffer = buf;
       const g = ac.createGain();
-      g.gain.value = 0.45;
+      g.gain.value = 0.2;
       src.connect(g);
       g.connect(ac.destination);
       src.start();

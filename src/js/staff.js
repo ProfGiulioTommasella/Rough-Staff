@@ -108,11 +108,20 @@ export function drawStaff(canvas, notesArray, playerCount) {
   const usableW  = w - PAD_L - CLEF_W - PAD_R;
   const sectionW = usableW / playerCount;
 
+  const staffTopY = cy + LINE_OFFSETS[LINE_OFFSETS.length - 1]; // cy - 60
+
   for (let i = 0; i < playerCount; i++) {
     const sectionStart = PAD_L + CLEF_W + i * sectionW;
 
     // Stanghetta di battuta al termine di ogni sezione
     drawBarline(ctx, sectionStart + sectionW, h);
+
+    // Numero giocatore sopra ogni sezione
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 22px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(String(i + 1), sectionStart + sectionW * 0.5, staffTopY - 8);
 
     if (notesArray && notesArray[i] != null) {
       const noteX = sectionStart + sectionW * 0.52;
@@ -131,4 +140,13 @@ export function drawStaff(canvas, notesArray, playerCount) {
 // Ridisegna senza note (joker attivo): righe + chiave + stanghette, note oscurate
 export function drawStaffCovered(canvas, playerCount) {
   drawStaff(canvas, [], playerCount);
+}
+
+// Restituisce le coordinate X (canvas-relative) del centro nota per ogni player
+export function getNoteCenters(canvasWidth, playerCount) {
+  const usableW = canvasWidth - PAD_L - CLEF_W - PAD_R;
+  const sectionW = usableW / playerCount;
+  return Array.from({ length: playerCount }, (_, i) =>
+    PAD_L + CLEF_W + i * sectionW + sectionW * 0.52
+  );
 }
