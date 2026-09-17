@@ -118,7 +118,7 @@ html, body {
 
 /* ── PULSANTI GAME ── */
 #btn-go    { clip-path: inset(82.0% 78.8% 0.0%  6.0%); cursor: pointer; z-index: 4; }
-#btn-reveal { clip-path: inset(80.7% 61.0% 0.0% 23.8%); cursor: pointer; z-index: 4; }
+#btn-reveal { clip-path: inset(80.7% 61.0% 0.0% 23.8%); cursor: pointer; z-index: 4; pointer-events: none; }
 #btn-home  { clip-path: inset(84.8% 47.5% 0.0% 43.5%); cursor: pointer; z-index: 4; }
 #btn-go:active, #btn-reveal:active, #btn-home:active { opacity: 0.8; }
 
