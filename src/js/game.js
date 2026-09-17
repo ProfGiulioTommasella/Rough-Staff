@@ -1,10 +1,13 @@
 import { DIFFICULTY_SETS, ANSWER_ORDER_IT, ANSWER_ORDER_EN, NOTE_TO_BAR_IT, NOTE_TO_BAR_EN } from './notes.js';
-import { drawStaff, drawStaffCovered } from './staff.js';
+import { drawStaff, drawStaffCovered, getNoteCenters } from './staff.js';
 import { playClick } from './audio.js';
 
 const TOTAL_ROUNDS = 5;
 const TIMER_MS = 3500;
-const NOTE_CREATOR_MS = 2000;
+const TX_START = -900;
+const TX_END = 850;
+const ANIM_DURATION_MS = 1200;
+const CANVAS_LEFT_IN_STAGE = 42.5;
 
 let cfg;
 let scores;
@@ -13,7 +16,7 @@ let notes;
 let answers;
 let phase = 'setup'; // 'setup' | 'answering' | 'revealed'
 let timerHandle;
-let noteCreatorHandle;
+let animHandle = null;
 let bound = false;
 
 export function startGame(state, onHome) {
@@ -47,7 +50,7 @@ function startRound() {
   const revealBtn = document.getElementById('btn-reveal');
   revealBtn.hidden = true;
   revealBtn.style.pointerEvents = 'none';
-  document.getElementById('note-creator').hidden = true;
+  stopNoteCreatorAnim();
   document.getElementById('spot-cover').hidden = true;
 
   updateRoundDisplay();
@@ -75,24 +78,22 @@ function onGo() {
     return;
   }
 
-  // phase === 'setup' → mostra le note, avvia la fase di risposta
+  // phase === 'setup' → avvia animazione note-creator, poi fase di risposta
   phase = 'answering';
   document.getElementById('btn-go').hidden = true;
-  document.getElementById('note-creator').hidden = false;
-  drawStaff(document.getElementById('staff-canvas'), notes, cfg.players);
 
-  noteCreatorHandle = setTimeout(() => {
-    document.getElementById('note-creator').hidden = true;
-  }, NOTE_CREATOR_MS);
+  const canvas = document.getElementById('staff-canvas');
+  drawStaff(canvas, [], cfg.players);
 
   for (let i = 0; i < cfg.players; i++) {
     document.getElementById(`answer-bar-${i + 1}`).hidden = false;
   }
 
+  startNoteCreatorAnim(canvas, notes, cfg.players);
+
   if (cfg.timer) {
     timerHandle = setTimeout(() => {
       document.getElementById('spot-cover').hidden = false;
-      const canvas = document.getElementById('staff-canvas');
       drawStaffCovered(canvas, cfg.players);
     }, TIMER_MS);
   }
@@ -122,11 +123,70 @@ function checkAllAnswered() {
   btn.style.pointerEvents = allAnswered ? 'auto' : 'none';
 }
 
+function startNoteCreatorAnim(canvas, notesArray, playerCount) {
+  const creator = document.getElementById('note-creator');
+  creator.hidden = false;
+  creator.style.transform = `translateX(${TX_START}px)`;
+
+  const centers = getNoteCenters(canvas.width, playerCount);
+  // Stage X for each note = canvas left offset + canvas-relative X
+  const stageNoteX = centers.map(cx => CANVAS_LEFT_IN_STAGE + cx);
+  const revealed = new Array(playerCount).fill(false);
+
+  const startTime = performance.now();
+
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / ANIM_DURATION_MS, 1);
+    const tx = TX_START + (TX_END - TX_START) * progress;
+
+    creator.style.transform = `translateX(${tx}px)`;
+
+    // Character center in stage coords: clip starts at 38% of 1280 = 486px
+    const charCenter = 486 + 640 + tx; // center of visible creator image
+
+    let anyNewReveal = false;
+    for (let i = 0; i < playerCount; i++) {
+      if (!revealed[i] && charCenter >= stageNoteX[i]) {
+        revealed[i] = true;
+        anyNewReveal = true;
+      }
+    }
+
+    if (anyNewReveal) {
+      const partial = notesArray.map((n, i) => revealed[i] ? n : null);
+      drawStaff(canvas, partial, playerCount);
+    }
+
+    if (progress < 1) {
+      animHandle = requestAnimationFrame(tick);
+    } else {
+      creator.hidden = true;
+      creator.style.transform = '';
+      animHandle = null;
+      // Ensure all notes drawn at end
+      drawStaff(canvas, notesArray, playerCount);
+    }
+  }
+
+  animHandle = requestAnimationFrame(tick);
+}
+
+function stopNoteCreatorAnim() {
+  if (animHandle !== null) {
+    cancelAnimationFrame(animHandle);
+    animHandle = null;
+  }
+  const creator = document.getElementById('note-creator');
+  creator.hidden = true;
+  creator.style.transform = '';
+}
+
 function onReveal() {
   playClick();
   phase = 'revealed';
   clearTimeout(timerHandle);
-  clearTimeout(noteCreatorHandle);
+  stopNoteCreatorAnim();
   document.getElementById('spot-cover').hidden = true;
   const revealBtnHide = document.getElementById('btn-reveal');
   revealBtnHide.hidden = true;
@@ -224,7 +284,7 @@ function bindGame(onHome) {
   document.getElementById('btn-home').addEventListener('click', () => {
     playClick();
     clearTimeout(timerHandle);
-    clearTimeout(noteCreatorHandle);
+    stopNoteCreatorAnim();
     phase = 'setup';
     hideAnswerBars();
     document.getElementById('game-screen').hidden = true;

@@ -109,6 +109,7 @@ html, body {
   pointer-events: none;
   clip-path: inset(29.9% 38.0% 30.1% 38.0%);
   z-index: 3;
+  will-change: transform;
 }
 #spot-cover {
   pointer-events: none;
@@ -151,7 +152,6 @@ html, body {
 
 /* Barra risposta (cliccabile) */
 .answer-bar { pointer-events: auto; cursor: pointer; }
-.answer-bar:active { opacity: 0.85; }
 #answer-bar-1 { clip-path: inset(11.8%  0.0% 76.0% 77.1%); }
 #answer-bar-2 { clip-path: inset(34.8%  0.0% 53.1% 77.2%); }
 #answer-bar-3 { clip-path: inset(57.3%  0.0% 30.6% 77.3%); }
