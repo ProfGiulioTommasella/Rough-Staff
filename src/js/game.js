@@ -43,7 +43,9 @@ function startRound() {
   }
 
   document.getElementById('btn-go').hidden = false;
-  document.getElementById('btn-reveal').hidden = true;
+  const revealBtn = document.getElementById('btn-reveal');
+  revealBtn.hidden = true;
+  revealBtn.style.pointerEvents = 'none';
   document.getElementById('note-creator').hidden = true;
   document.getElementById('spot-cover').hidden = true;
 
@@ -114,7 +116,9 @@ function cycleAnswer(playerIdx, direction) {
 
 function checkAllAnswered() {
   const allAnswered = answers.slice(0, cfg.players).every(a => a !== 'q');
-  document.getElementById('btn-reveal').hidden = !allAnswered;
+  const btn = document.getElementById('btn-reveal');
+  btn.hidden = !allAnswered;
+  btn.style.pointerEvents = allAnswered ? 'auto' : 'none';
 }
 
 function onReveal() {
@@ -123,7 +127,9 @@ function onReveal() {
   clearTimeout(timerHandle);
   clearTimeout(noteCreatorHandle);
   document.getElementById('spot-cover').hidden = true;
-  document.getElementById('btn-reveal').hidden = true;
+  const revealBtnHide = document.getElementById('btn-reveal');
+  revealBtnHide.hidden = true;
+  revealBtnHide.style.pointerEvents = 'none';
   document.getElementById('note-creator').hidden = true;
 
   const canvas = document.getElementById('staff-canvas');
