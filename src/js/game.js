@@ -13,6 +13,7 @@ let cfg;
 let scores;
 let round;
 let notes;
+let prevNotes; // note del round precedente, per evitare ripetizioni consecutive
 let answers;
 let phase = 'setup'; // 'setup' | 'answering' | 'revealed'
 let timerHandle;
@@ -23,6 +24,7 @@ export function startGame(state, onHome) {
   cfg = state;
   scores = [0, 0, 0, 0];
   round = 0;
+  prevNotes = [];
   document.getElementById('home-screen').hidden = true;
   document.getElementById('game-screen').hidden = false;
   document.getElementById('btn-home').hidden = true;
@@ -35,6 +37,7 @@ export function startGame(state, onHome) {
 function startRound() {
   round++;
   phase = 'setup';
+  prevNotes = notes ? [...notes] : [];
   notes = drawNotes();
   answers = Array(cfg.players).fill('q');
 
@@ -56,13 +59,18 @@ function startRound() {
   updateRoundDisplay();
 }
 
-// Ogni giocatore riceve una nota diversa da tutti gli altri
+// Ogni giocatore riceve una nota diversa dagli altri e diversa dalla sua nota del round precedente
 function drawNotes() {
   const pool = DIFFICULTY_SETS[cfg.difficulty];
   const result = [];
   for (let i = 0; i < cfg.players; i++) {
-    const remaining = pool.filter(n => !result.includes(n));
-    const available = remaining.length > 0 ? remaining : pool;
+    const alreadyPicked = new Set(result);
+    // Escludi: note già assegnate questo round + nota precedente del giocatore i
+    let available = pool.filter(n => !alreadyPicked.has(n) && n !== prevNotes[i]);
+    // Fallback: se non resta nulla, ignora solo il vincolo della nota precedente
+    if (available.length === 0) available = pool.filter(n => !alreadyPicked.has(n));
+    // Fallback finale: usa tutto il pool
+    if (available.length === 0) available = pool;
     result.push(available[Math.floor(Math.random() * available.length)]);
   }
   return result;
