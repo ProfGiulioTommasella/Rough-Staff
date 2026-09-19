@@ -4,7 +4,7 @@ export const DIFFICULTY_SETS = {
   RIGHI:      ['MI(b)', 'SOL', 'SI', 'RE', 'FA(a)'],
   SPAZI:      ['FA(b)', 'LA', 'DO', 'MI(a)'],
   PENTA_1:    ['MI(b)', 'FA(b)', 'SOL', 'LA', 'SI', 'DO', 'RE', 'MI(a)', 'FA(a)'],
-  PENTA_FULL: ['DO(b)', 'RE(b)', 'MI(b)', 'FA(b)', 'SOL', 'LA', 'SI', 'MI(a)', 'FA(a)', 'DO(a)']
+  PENTA_FULL: ['DO(b)', 'RE(b)', 'MI(b)', 'FA(b)', 'SOL', 'LA', 'SI', 'MI(a)', 'FA(a)', 'SOL(a)', 'LA(a)', 'DO(a)']
 };
 
 // Livelli non disponibili con 3-4 giocatori
@@ -26,16 +26,20 @@ export const NOTE_Y = {
   'RE':    -30,  // linea 4, D5 — solo PENTA_1
   'MI(a)': -45,  // spazio 4, E5
   'FA(a)': -60,  // linea 5, F5
+  'SOL(a)':-75,  // spazio sopra linea 5, G5
+  'LA(a)': -90,  // prima linea supplementare sopra, A5
   'DO(a)': -15   // spazio 3, C5 (DO dell'ottava superiore rispetto a DO(b))
 };
 
 // Note che stanno su una linea
-export const ON_LINE = new Set(['MI(b)', 'SOL', 'SI', 'RE', 'FA(a)', 'DO(b)']);
+export const ON_LINE = new Set(['MI(b)', 'SOL', 'SI', 'RE', 'FA(a)', 'DO(b)', 'LA(a)']);
 
 // Note che richiedono linee supplementari
 export const LEDGER_NOTES = {
-  'DO(b)': [99],  // linea supplementare sotto
-  'RE(b)': [],    // spazio sotto linea 1, nessuna linea supplementare
+  'DO(b)': [99],   // linea supplementare sotto
+  'RE(b)': [],     // spazio sotto linea 1, nessuna linea supplementare
+  'SOL(a)':[],     // spazio sopra linea 5, nessuna linea supplementare
+  'LA(a)': [-90],  // prima linea supplementare sopra
 };
 
 // Ordine ciclico delle risposte per lingua (? = neutro iniziale)
@@ -46,12 +50,14 @@ export const ANSWER_ORDER_EN = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
 export const NOTE_TO_BAR_IT = {
   'DO(b)': 'do', 'RE(b)': 're', 'MI(b)': 'mi', 'FA(b)': 'fa',
   'SOL': 'sol', 'LA': 'la', 'SI': 'si',
-  'DO': 'do', 'RE': 're', 'MI(a)': 'mi', 'FA(a)': 'fa', 'DO(a)': 'do'
+  'DO': 'do', 'RE': 're', 'MI(a)': 'mi', 'FA(a)': 'fa',
+  'SOL(a)': 'sol', 'LA(a)': 'la', 'DO(a)': 'do'
 };
 
 // Mappa nota → chiave file barra risposta in EN
 export const NOTE_TO_BAR_EN = {
   'DO(b)': 'c', 'RE(b)': 'd', 'MI(b)': 'e', 'FA(b)': 'f',
   'SOL': 'g', 'LA': 'a', 'SI': 'b',
-  'DO': 'c', 'RE': 'd', 'MI(a)': 'e', 'FA(a)': 'f', 'DO(a)': 'c'
+  'DO': 'c', 'RE': 'd', 'MI(a)': 'e', 'FA(a)': 'f',
+  'SOL(a)': 'g', 'LA(a)': 'a', 'DO(a)': 'c'
 };
