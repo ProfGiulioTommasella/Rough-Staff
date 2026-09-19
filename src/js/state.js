@@ -2,7 +2,7 @@ const KEY = 'rough-staff:config';
 
 const DEFAULTS = {
   players: 1,
-  difficulty: 'SPAZI',
+  difficulty: null,
   timer: false,
   lang: 'it'
 };
