@@ -81,11 +81,12 @@ function onGo() {
   playClick();
 
   if (phase === 'revealed') {
-    // GO dopo il reveal → nascondi barre, anima punteggi, poi round successivo
+    // GO dopo il reveal → nascondi barre, anima punteggi, poi round successivo o fine
     hideAnswerBars();
+    document.getElementById('btn-go').hidden = true;
     pendingFlash.forEach(i => flashScore(i));
     pendingFlash = [];
-    setTimeout(startRound, 900);
+    setTimeout(round >= TOTAL_ROUNDS ? endGame : startRound, 900);
     return;
   }
 
@@ -224,17 +225,11 @@ function onReveal() {
 
   renderScores();
 
-  if (round >= TOTAL_ROUNDS) {
-    endGame();
-  } else {
-    // Mostra GO per passare al round successivo
-    document.getElementById('btn-go').hidden = false;
-  }
+  // GO appare sempre: nell'ultimo round porta a endGame invece che al round successivo
+  document.getElementById('btn-go').hidden = false;
 }
 
 function endGame() {
-  pendingFlash.forEach(i => flashScore(i));
-  pendingFlash = [];
   const maxScore = Math.max(...scores.slice(0, cfg.players));
   for (let i = 0; i < cfg.players; i++) {
     if (scores[i] === maxScore) {
