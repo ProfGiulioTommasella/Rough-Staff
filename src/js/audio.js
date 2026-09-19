@@ -19,17 +19,14 @@ async function loadBuffer(url) {
 function playBuffer(buf, gainValue) {
   try {
     const ac = getCtx();
-    const play = () => {
-      const src = ac.createBufferSource();
-      src.buffer = buf;
-      const g = ac.createGain();
-      g.gain.value = gainValue;
-      src.connect(g);
-      g.connect(ac.destination);
-      src.start();
-    };
-    if (ac.state === 'running') play();
-    else ac.resume().then(play).catch(() => {});
+    if (ac.state !== 'running') return;
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const g = ac.createGain();
+    g.gain.value = gainValue;
+    src.connect(g);
+    g.connect(ac.destination);
+    src.start();
   } catch (e) {}
 }
 
@@ -60,7 +57,7 @@ export function playClick() {
 export async function playSpray() {
   try {
     const buf = await loadBuffer('Spray%20sound.wav');
-    playBuffer(buf, 0.75);
+    playBuffer(buf, 0.45);
   } catch (e) {}
 }
 
