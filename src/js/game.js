@@ -19,6 +19,7 @@ let phase = 'setup'; // 'setup' | 'answering' | 'revealed'
 let timerHandle;
 let animHandle = null;
 let bound = false;
+let pendingFlash = [];
 
 export function startGame(state, onHome) {
   cfg = state;
@@ -80,9 +81,11 @@ function onGo() {
   playClick();
 
   if (phase === 'revealed') {
-    // GO dopo il reveal → round successivo
+    // GO dopo il reveal → nascondi barre, anima punteggi, poi round successivo
     hideAnswerBars();
-    startRound();
+    pendingFlash.forEach(i => flashScore(i));
+    pendingFlash = [];
+    setTimeout(startRound, 900);
     return;
   }
 
@@ -194,6 +197,7 @@ function stopNoteCreatorAnim() {
 function onReveal() {
   playClick();
   phase = 'revealed';
+  pendingFlash = [];
   clearTimeout(timerHandle);
   stopNoteCreatorAnim();
   document.getElementById('spot-cover').hidden = true;
@@ -211,7 +215,7 @@ function onReveal() {
     const bar = document.getElementById(`answer-bar-${i + 1}`);
     if (answers[i] === correctKey) {
       scores[i] = Math.min(5, scores[i] + 1);
-      flashScore(i);
+      pendingFlash.push(i);
       bar.classList.add('answer-correct');
     } else {
       bar.classList.add('answer-wrong');
@@ -229,6 +233,8 @@ function onReveal() {
 }
 
 function endGame() {
+  pendingFlash.forEach(i => flashScore(i));
+  pendingFlash = [];
   const maxScore = Math.max(...scores.slice(0, cfg.players));
   for (let i = 0; i < cfg.players; i++) {
     if (scores[i] === maxScore) {
