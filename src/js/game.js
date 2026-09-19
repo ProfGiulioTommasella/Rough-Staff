@@ -1,6 +1,6 @@
 import { DIFFICULTY_SETS, ANSWER_ORDER_IT, ANSWER_ORDER_EN, NOTE_TO_BAR_IT, NOTE_TO_BAR_EN } from './notes.js';
 import { drawStaff, drawStaffCovered, getNoteCenters } from './staff.js';
-import { playClick } from './audio.js';
+import { playClick, playSpray } from './audio.js';
 
 const TOTAL_ROUNDS = 5;
 const TIMER_MS = 3500;
@@ -162,6 +162,7 @@ function startNoteCreatorAnim(canvas, notesArray, playerCount) {
     }
 
     if (anyNewReveal) {
+      playSpray();
       const partial = notesArray.map((n, i) => revealed[i] ? n : null);
       drawStaff(canvas, partial, playerCount);
     }

@@ -1,6 +1,6 @@
 import { loadState, saveState } from './state.js';
 import { MULTI_DISABLED } from './notes.js';
-import { playClick } from './audio.js';
+import { playClick, playNeon, playSpray } from './audio.js';
 
 let state;
 let titleInterval = null;
@@ -19,6 +19,7 @@ function startTitleAnimation() {
   titleInterval = setInterval(() => {
     on = !on;
     img.src = on ? 'home-horizontal-titleon.png' : 'home-horizontal-titleoff.png';
+    if (on) playNeon();
   }, 900);
 }
 
@@ -119,7 +120,7 @@ function bindHome(onStart) {
 
   document.getElementById('btn-start').addEventListener('click', () => {
     if (!state.players || !state.difficulty) return;
-    playClick();
+    playSpray();
     saveState(state);
     stopTitleAnimation();
     document.getElementById('btn-start').hidden = true;
