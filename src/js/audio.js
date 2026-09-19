@@ -1,8 +1,36 @@
 let audioCtx = null;
+const bufferCache = {};
 
 function getCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return audioCtx;
+}
+
+async function loadBuffer(url) {
+  if (bufferCache[url]) return bufferCache[url];
+  const ac = getCtx();
+  const res = await fetch(url);
+  const ab = await res.arrayBuffer();
+  const buf = await ac.decodeAudioData(ab);
+  bufferCache[url] = buf;
+  return buf;
+}
+
+function playBuffer(buf, gainValue) {
+  try {
+    const ac = getCtx();
+    const play = () => {
+      const src = ac.createBufferSource();
+      src.buffer = buf;
+      const g = ac.createGain();
+      g.gain.value = gainValue;
+      src.connect(g);
+      g.connect(ac.destination);
+      src.start();
+    };
+    if (ac.state === 'running') play();
+    else ac.resume().then(play).catch(() => {});
+  } catch (e) {}
 }
 
 export function playClick() {
@@ -24,10 +52,25 @@ export function playClick() {
       g.connect(ac.destination);
       src.start();
     };
-    if (ac.state === 'running') {
-      play();
-    } else {
-      ac.resume().then(play).catch(() => {});
-    }
+    if (ac.state === 'running') play();
+    else ac.resume().then(play).catch(() => {});
   } catch (e) {}
 }
+
+export async function playSpray() {
+  try {
+    const buf = await loadBuffer('Spray%20sound.wav');
+    playBuffer(buf, 0.75);
+  } catch (e) {}
+}
+
+export async function playNeon() {
+  try {
+    const buf = await loadBuffer('rumore%20elettrico%20e%20neon_CORTO.mp3');
+    playBuffer(buf, 0.55);
+  } catch (e) {}
+}
+
+// Pre-carica in background appena il modulo è importato
+loadBuffer('Spray%20sound.wav').catch(() => {});
+loadBuffer('rumore%20elettrico%20e%20neon_CORTO.mp3').catch(() => {});
