@@ -9,7 +9,8 @@ const DEFAULTS = {
 
 export function loadState() {
   try {
-    return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || '{}') };
+    const stored = JSON.parse(localStorage.getItem(KEY) || '{}');
+    return { ...DEFAULTS, ...stored, difficulty: null };
   } catch {
     return { ...DEFAULTS };
   }
