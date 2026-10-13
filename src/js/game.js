@@ -302,7 +302,6 @@ function bindGame(onHome) {
     for (let i = 1; i <= 4; i++) {
       document.getElementById(`winner-icon-${i}`).hidden = true;
     }
-    bound = false;
     onHome();
   });
 
