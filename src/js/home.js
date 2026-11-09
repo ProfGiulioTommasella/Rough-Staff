@@ -80,11 +80,8 @@ function renderHome() {
     ? 'btn-home-horizontal-timer-on.png'
     : 'btn-home-horizontal-timer-off.png';
 
-  // startoff.png copre sempre la macchia nel bg; diventa cliccabile solo se tutto selezionato
-  const startBtn = document.getElementById('btn-start');
-  const ready = !!(state.players && state.difficulty);
-  startBtn.style.opacity = ready ? '1' : '0';
-  startBtn.style.pointerEvents = ready ? '' : 'none';
+  // START visibile solo se tutto selezionato
+  document.getElementById('btn-start').hidden = !(state.players && state.difficulty);
 }
 
 function bindHome(onStart) {
@@ -129,9 +126,7 @@ function bindHome(onStart) {
     playSpray();
     saveState(state);
     stopTitleAnimation();
-    const btn = document.getElementById('btn-start');
-    btn.style.opacity = '0';
-    btn.style.pointerEvents = 'none';
+    document.getElementById('btn-start').hidden = true;
     onStart(state);
   });
 }
