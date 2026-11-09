@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Rough Staff</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap">
-  <link rel="stylesheet" href="src/css/style.css?v=10">
+  <link rel="stylesheet" href="src/css/style.css?v=11">
 </head>
 <body>
 
@@ -143,8 +146,8 @@
 </script>
 
 <script type="module">
-  import { initHome } from './src/js/home.js?v=10';
-  import { startGame } from './src/js/game.js?v=10';
+  import { initHome } from './src/js/home.js?v=11';
+  import { startGame } from './src/js/game.js?v=11';
 
   function onStart(state) {
     startGame(state, () => initHome(onStart));
