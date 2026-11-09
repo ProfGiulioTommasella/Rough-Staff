@@ -4,13 +4,43 @@ html, body {
   width: 100%; height: 100%;
   overflow: hidden;
   background: #111;
+  position: relative;
 }
+
+/* ── STAGE WRAPPER (centra e scala il palco 1280×768) ── */
+#stage-wrapper {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%); /* JS sovrascrive con scale */
+  transform-origin: center center;
+  width: 1280px;
+}
+
+/* ── OVERLAY RUOTA TELEFONO ── */
+#rotate-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: #111;
+  display: flex; align-items: center; justify-content: center;
+}
+#rotate-box {
+  text-align: center; color: #f5f2ec;
+  font-family: Georgia, serif;
+}
+#rotate-icon {
+  font-size: 72px; line-height: 1;
+  animation: spin 2s linear infinite;
+}
+#rotate-box p { margin-top: 16px; font-size: 20px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── MOBILE 2 PLAYER: nascondi bottoni giocatori 3 e 4 ── */
+.mobile-2p #btn-players-3,
+.mobile-2p #btn-players-4 { display: none !important; }
 
 /* ── STAGE (1280×768 = dimensioni originali Scratch) ── */
 #home-screen, #game-screen {
   position: relative;
   width: 1280px; height: 768px;
-  margin: 0 auto;
   overflow: hidden;
 }
 

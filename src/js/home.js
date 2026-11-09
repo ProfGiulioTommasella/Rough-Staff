@@ -5,8 +5,11 @@ import { playClick, playNeon, playSpray } from './audio.js';
 let state;
 let titleInterval = null;
 
+const MAX_PLAYERS = document.documentElement.classList.contains('mobile-2p') ? 2 : 4;
+
 export function initHome(onStart) {
   state = loadState();
+  if (state.players > MAX_PLAYERS) state.players = MAX_PLAYERS;
   renderHome();
   startTitleAnimation();
   bindHome(onStart);
@@ -82,7 +85,7 @@ function renderHome() {
 }
 
 function bindHome(onStart) {
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= MAX_PLAYERS; i++) {
     document.getElementById(`btn-players-${i}`).addEventListener('click', () => {
       playClick();
       state.players = i;

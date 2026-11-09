@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1280">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Rough Staff</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,6 +10,17 @@
   <link rel="stylesheet" href="src/css/style.css?v=9">
 </head>
 <body>
+
+<!-- Overlay "ruota il telefono" (portrait su mobile) -->
+<div id="rotate-overlay" hidden>
+  <div id="rotate-box">
+    <div id="rotate-icon">&#8635;</div>
+    <p>Ruota il telefono</p>
+  </div>
+</div>
+
+<!-- Wrapper scalabile: tutto il palco 1280×768 vive qui dentro -->
+<div id="stage-wrapper">
 
 <!-- ── HOME ── -->
 <div id="home-screen">
@@ -33,6 +44,11 @@
     <img id="btn-diff-penta1"    src="btn-difficolta-penta1-normal.png"    alt="Penta 1">
     <img id="btn-diff-pentafull" src="btn-difficolta-pentafull-normal.png" alt="Penta Full">
   </div>
+</div>
+
+<!-- ── TRANSIZIONE ── -->
+<div id="transition-overlay" hidden>
+  <img id="transition-img" src="porta-transizione1.png" alt="">
 </div>
 
 <!-- ── GAME ── -->
@@ -107,6 +123,38 @@
 
   </div>
 </div>
+
+</div><!-- /stage-wrapper -->
+
+<script>
+  // Scaling e mobile detection (non-module, eseguito subito)
+  (function () {
+    const STAGE_W = 1280, STAGE_H = 768;
+    // Schermo "piccolo" = telefono (dimensione minore < 600px CSS)
+    const MOBILE = Math.min(screen.width, screen.height) < 600;
+    if (MOBILE) document.documentElement.classList.add('mobile-2p');
+
+    function fitStage() {
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const portrait = vw < vh;
+      const rotateEl = document.getElementById('rotate-overlay');
+      const wrapEl   = document.getElementById('stage-wrapper');
+      if (MOBILE && portrait) {
+        rotateEl.hidden = false;
+        wrapEl.style.visibility = 'hidden';
+        return;
+      }
+      rotateEl.hidden = true;
+      wrapEl.style.visibility = '';
+      const scale = Math.min(vw / STAGE_W, vh / STAGE_H, 1);
+      wrapEl.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    }
+
+    window.addEventListener('resize', fitStage);
+    window.addEventListener('orientationchange', fitStage);
+    document.addEventListener('DOMContentLoaded', fitStage);
+  })();
+</script>
 
 <script type="module">
   import { initHome } from './src/js/home.js?v=9';
