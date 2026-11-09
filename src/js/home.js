@@ -80,7 +80,7 @@ function renderHome() {
     ? 'btn-home-horizontal-timer-on.png'
     : 'btn-home-horizontal-timer-off.png';
 
-  // startoff.png copre sempre la macchia nel bg; diventa cliccabile solo se tutto selezionato
+  // btn-start: visibilità via opacity (mai via hidden, che romperebbe il display)
   const startBtn = document.getElementById('btn-start');
   const ready = !!(state.players && state.difficulty);
   startBtn.style.opacity = ready ? '1' : '0';
