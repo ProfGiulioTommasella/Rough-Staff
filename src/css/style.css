@@ -74,18 +74,6 @@ html, body {
 #btn-lang  { clip-path: inset(30.2% 82.3% 57.7%  3.5%); }
 #btn-timer { clip-path: inset(51.6% 82.3% 35.7%  3.6%); display: none; }
 
-/* ── TRANSIZIONE ── */
-#transition-overlay {
-  position: fixed; inset: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: center;
-  pointer-events: none;
-}
-#transition-overlay img {
-  position: static;
-  width: 1280px; height: 768px;
-  object-fit: cover;
-}
-
 /* ── GAME ── */
 .game-ui { position: absolute; top:0; left:0; width:1280px; height:768px; }
 
