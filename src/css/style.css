@@ -61,7 +61,9 @@ html, body {
 #btn-players-4 { clip-path: inset(2.1% 11.3% 76.3% 75.5%); }
 
 /* Bomboletta START */
-#btn-start { clip-path: inset(27.9% 13.4% 34.0% 77.7%); }
+#btn-start        { clip-path: inset(27.9% 13.4% 34.0% 77.7%); }
+/* Stessa posizione: copre la macchia nel background del game screen */
+#game-start-cover { clip-path: inset(27.9% 13.4% 34.0% 77.7%); z-index: 1; }
 
 /* Difficoltà */
 #btn-diff-spazi     { clip-path: inset(76.4% 68.8% 10.4% 13.4%); }
