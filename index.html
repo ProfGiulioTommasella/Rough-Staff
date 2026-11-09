@@ -137,17 +137,16 @@
     function fitStage() {
       const vw = window.innerWidth, vh = window.innerHeight;
       const portrait = vw < vh;
-      const rotateEl = document.getElementById('rotate-overlay');
-      const wrapEl   = document.getElementById('stage-wrapper');
-      if (MOBILE && portrait) {
-        rotateEl.hidden = false;
-        wrapEl.style.visibility = 'hidden';
-        return;
-      }
-      rotateEl.hidden = true;
+      const wrapEl = document.getElementById('stage-wrapper');
       wrapEl.style.visibility = '';
-      const scale = Math.min(vw / STAGE_W, vh / STAGE_H, 1);
-      wrapEl.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      if (MOBILE && portrait) {
+        // Ruota lo stage di 90° per adattarlo al portrait senza chiedere di ruotare il telefono
+        const scale = Math.min(vw / STAGE_H, vh / STAGE_W);
+        wrapEl.style.transform = `translate(-50%, -50%) rotate(90deg) scale(${scale})`;
+      } else {
+        const scale = Math.min(vw / STAGE_W, vh / STAGE_H, 1);
+        wrapEl.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      }
     }
 
     window.addEventListener('resize', fitStage);
